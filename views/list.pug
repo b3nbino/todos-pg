@@ -1,0 +1,45 @@
+extends layout
+
+block main
+  section#todos(class=isDoneList ? "done" : "")
+    header
+      h2= todoList.title
+      if signedIn
+        ul
+          if todoList.todos.length > 0 && !isDoneList
+            li
+              form.complete_all(action=`/lists/${todoList.id}/complete_all`
+                                method="post")
+                button.check(type="submit") Complete All
+          li
+            form(action=`/lists/${todoList.id}/edit` method="get")
+              button.edit(type="submit") Edit List
+
+    ul
+      each todo in todoList.todos
+        li(class=todo.done ? "done" : "")
+          form.check(action=`/lists/${todoList.id}/todos/${todo.id}/toggle`
+                    method="post")
+            input(type="hidden" name="done" value=!todo.done)
+            button Done
+
+          h3= todo.title
+          form.delete(action=`/lists/${todoList.id}/todos/${todo.id}/destroy`
+                      method="post")
+            button Delete
+
+    form(action=`/lists/${todoList.id}/todos` method="post")
+      dl
+        dt
+          label(for="todoTitle") Enter a new todo item:
+        dd
+          input(type="text"
+                name="todoTitle"
+                placeholder="Something to do"
+                value=todoTitle)
+      fieldset.actions
+        button Add
+
+block headerLinks
+  .actions
+    a.list(href="/lists") All Lists
