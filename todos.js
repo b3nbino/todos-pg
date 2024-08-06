@@ -6,10 +6,11 @@ const { body, validationResult } = require("express-validator");
 const store = require("connect-loki");
 const PgPersistence = require("./lib/pg-persistence");
 const catchError = require("./lib/catch-error");
+const config = require("./lib/config");
 
 const app = express();
-const host = "localhost";
-const port = 3000;
+const host = config.HOST;
+const port = config.PORT;
 const LokiStore = store(session);
 
 const requiresAuthentication = (req, res, next) => {
@@ -37,7 +38,7 @@ app.use(
     name: "launch-school-todos-session-id",
     resave: false,
     saveUninitialized: true,
-    secret: "this is not very secure",
+    secret: config.SECRET,
     store: new LokiStore({}),
   })
 );
