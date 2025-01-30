@@ -13,6 +13,7 @@ const host = config.HOST;
 const port = config.PORT;
 const LokiStore = store(session);
 
+//Middlewear before all routing check for signedIn status
 const requiresAuthentication = (req, res, next) => {
   if (!res.locals.signedIn) {
     res.redirect(302, "/users/signin");
